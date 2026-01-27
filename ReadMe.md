@@ -104,7 +104,7 @@ To train the model on your dataset, use the following command:
 * [Project Page](http://127.0.0.1:5500/docs/index.html#analysis)
 * [Department of Computing and Information System](#)
 * [University of Sabaragamuwa, Sri Lanka](#)
-* [Download the Research Paper](#)
+
 
 ---
 © 2026 Department of Computing and Information System, University of Sabaragamuwa
