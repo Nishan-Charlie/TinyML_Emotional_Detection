@@ -1,16 +1,13 @@
 # Human Emotion Detection with LightCBAMNet: A Tiny Deep Learning Model for Edge Devices
 
-![University Logo](docs/images/images.png)
-
-### Department of Computing and Information System
-**University of Sabaragamuwa, Sri Lanka**
 
 ---
 
-## 👥 Team & Supervision
-* **Developer:** T.Sajeeth ([e17144@eng.pdn.ac.lk](mailto:e17144@eng.pdn.ac.lk))
-* **Supervisors:** * Lec. Nishankar.S ([Nishankar@eng.pdn.ac.lk](mailto:Nishankar@eng.pdn.ac.lk))
-    * Prof. Vigneshwaran.P ([Vigneshwaran@eng.pdn.ac.lk](mailto:Vigneshwaran@eng.pdn.ac.lk))
+## 👥 Team 
+* T.Sajeeth ([e17144@eng.pdn.ac.lk](mailto:tsajeeth.appsc.sab.ac.lk))
+## Supervisors
+* Lec. Nishankar.S ([Nishankar@eng.pdn.ac.lk](mailto:Nishankar@eng.pdn.ac.lk))
+* Prof. Vigneshwaran.P ([Vigneshwaran@eng.pdn.ac.lk](mailto:Vigneshwaran@eng.pdn.ac.lk))
 
 ---
 
@@ -77,15 +74,15 @@ The model follows a streamlined, modular pipeline:
 
 ## 5. Setup & Implementation
 **Prerequisites**
-Python 3.8+, PyTorch 1.7+, Torchvision, Scikit-learn, and Tqdm.
+* Python 3.8+, PyTorch 1.7+, Torchvision, Scikit-learn, and Tqdm.
 
 **Installation**
-`pip install torch torchvision scikit-learn tqdm`
+* `pip install torch torchvision scikit-learn tqdm`
 
 **Training**
-To train the model on your dataset, use the following command:
+* To train the model on your dataset, use the following command:
 
-`python train.py --data_dir images --epochs 20 --batch_size 32 --lr 0.001`
+  `python train.py --data_dir images --epochs 20 --batch_size 32 --lr 0.001`
 
 ---
 
