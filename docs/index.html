@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightCBAMNet - Human Emotion Detection</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/dist/jax-chtml.js"></script>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="container header-content">
+            <img src="/docs/images/images.png" alt="University Logo" class="logo">
+            <div class="header-text">
+                <h1>Projects - Department of Computing and Information System</h1>
+                <h2>University of Sabaragamuwa, Sri Lanka</h2>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-title">
+            <h1>Human Emotion Detection with LightCBAMNet: A Tiny Deep Learning Model for Edge Devices</h1>
+        </section>
+
+        <section class="project-info">
+            <div class="info-group">
+                <h3>Team</h3>
+                <ul>
+                    <li>T.Sajeeth <a href="mailto:e17144@eng.pdn.ac.lk">e17144@eng.pdn.ac.lk</a></li>
+                </ul>
+            </div>
+
+            <div class="info-group">
+                <h3>Supervisors</h3>
+                <ul>
+                    <li>Lec. Nishankar.S, <a href="mailto:Nishankar@eng.pdn.ac.lk">Nishankar@eng.pdn.ac.lk</a></li>
+                    <li>Prof. Vigneshwaran.P, <a href="mailto:Vigneshwaran@eng.pdn.ac.lk">Vigneshwaran@eng.pdn.ac.lk</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <nav class="toc">
+            <h3>Table of Content</h3>
+            <ol>
+                <li><a href="#abstract">Abstract & Overview</a></li>
+                <li><a href="#innovations">Key Innovations</a></li>
+                <li><a href="#preparation">Data Preparation & Augmentation</a></li>
+                <li><a href="#architecture">Architecture Breakdown</a></li>
+                <li><a href="#setup">Setup & Implementation</a></li>
+                <li><a href="#analysis">Comparative Analysis</a></li>
+                <li><a href="#links">Links</a></li>
+            </ol>
+        </nav>
+
+        <hr>
+
+        <article class="content">
+            <section id="abstract">
+                <h2>1. Abstract & Overview</h2>
+                <p><strong>LightCBAMNet</strong> is a lightweight, high-performance convolutional neural network designed specifically for Facial Emotion Recognition (FER) in resource-constrained environments. By combining efficient depthwise convolutions with a specialized attention mechanism, this model achieves a balance between low parameter counts and high classification accuracy.</p>
+                <p>🔬 <strong>Research Focus:</strong> This research addresses the challenge of deploying robust Emotion Detection on small edge devices such as IoT sensors, mobile devices, and micro-controllers, ensuring privacy and low latency through local inference.</p>
+            </section>
+
+            <section id="innovations">
+                <h2>2. Key Innovations</h2>
+                <ul>
+                    <li><strong>Phish Activation:</strong> Uses the \(x \cdot \tanh(\text{GELU}(x))\) activation function for smoother gradient flow compared to standard ReLU.</li>
+                    <li><strong>DCWP Module:</strong> Implements Depthwise Convolution with Phish activation to minimize FLOPs (Floating Point Operations) while maintaining feature richness.</li>
+                    <li><strong>CBAM Integration:</strong> A Convolutional Block Attention Module that sequentially applies Channel and Spatial attention, allowing the model to focus on critical facial landmarks like the eyes, nose, and mouth.</li>
+                    <li><strong>Efficiency:</strong> Optimized for a tiny memory footprint, making it ideal for real-time inference on hardware without dedicated GPUs.</li>
+                </ul>
+            </section>
+
+            <section id="preparation">
+                <h2>3. Data Preparation & Augmentation</h2>
+                
+                <h3>3.1 Emotion Sample Visualization</h3>
+                <p>The dataset consists of grayscale and RGB facial images categorized into seven distinct emotions. Visualizing these samples ensures that the model is learning from diverse facial expressions across different demographics.</p>
+                <div class="visual-container">
+                    <img src="/docs/images/some_images.jpeg" alt="Emotion Image Samples" class="content-image">
+                    <p class="caption">Figure 1: Representative samples from the emotion dataset showing various facial expressions.</p>
+                </div>
+
+                <h3>3.2 Raw Dataset Distribution</h3>
+                <p>Before processing, a statistical analysis of the dataset was conducted to identify class imbalances. Understanding the frequency of each emotion class is crucial for configuring the loss function and evaluation metrics.</p>
+                <div class="visual-container">
+                    <img src="/docs/images/count.png" alt="Image Counting Chart" class="content-image">
+                    <p class="caption">Figure 2: Distribution of image counts across the seven emotion categories prior to augmentation.</p>
+                </div>
+
+                <h3>3.3 Post-Augmentation Analysis</h3>
+                <p>To enhance the robustness of LightCBAMNet, data augmentation techniques such as random horizontal flips, rotations, and brightness adjustments were applied. This process balances the classes and helps the model generalize better to unseen edge-case data.</p>
+                <div class="visual-container">
+                    <img src="/docs/images/augmentation.png" alt="After Augmentation Data" class="content-image">
+                    <p class="caption">Figure 3: Comparison of dataset density and diversity following the application of augmentation pipelines.</p>
+                </div>
+            </section>
+
+            <section id="architecture">
+                <h2>4. Architecture Breakdown</h2>
+                <p>The model follows a streamlined, modular pipeline:</p>
+                <ul>
+                    <li><strong>Stem:</strong> A large-kernel (7x7) convolution with stride 3 for rapid spatial downsampling.</li>
+                    <li><strong>DCWP Layers:</strong> Two stages of depthwise-pointwise convolutions for efficient feature extraction.</li>
+                    <li><strong>LR Modules:</strong> Linear Bottleneck Residual modules to refine features and prevent vanishing gradients.</li>
+                    <li><strong>Attention Head:</strong> The <strong>CBAM</strong> block (Channel Attention followed by Spatial Attention) to weight important features.</li>
+                    <li><strong>Classifier:</strong> Global Average Pooling followed by Dropout and a Linear layer for final emotion classification.</li>
+                </ul>
+            </section>
+
+            <section id="setup">
+                <h2>5. Setup & Implementation</h2>
+                <h3>Prerequisites</h3>
+                <p>Python 3.8+, PyTorch 1.7+, Torchvision, Scikit-learn, and Tqdm.</p>
+                
+                <h3>Installation</h3>
+                <pre><code>pip install torch torchvision scikit-learn tqdm</code></pre>
+
+                <h3>Training</h3>
+                <p>To train the model on your dataset, use the following command:</p>
+                <pre><code>python train.py --data_dir images --epochs 20 --batch_size 32 --lr 0.001</code></pre>
+            </section>
+
+            <section id="analysis">
+                <h2>6. Comparative Analysis</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Params</th>
+                            <th>Target Device</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ResNet-50</td>
+                            <td>~25.6M</td>
+                            <td>Desktop/Server</td>
+                        </tr>
+                        <tr>
+                            <td>MobileNetV2</td>
+                            <td>~3.4M</td>
+                            <td>Smartphone</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td><strong>LightCBAMNet</strong></td>
+                            <td><strong>&lt; 1M</strong></td>
+                            <td><strong>Edge/IoT</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="links">
+                <h2>7. Links</h2>
+                <ul class="links-list">
+                    <li><a href="https://github.com/Nishan-Charlie/TinyML_Emotional_Detection.git">Project Repository</a></li>
+                    <li><a href="http://127.0.0.1:5500/docs/index.html#analysis">Project Page</a></li>
+                    <li><a href="#">Department of Computing and Information System</a></li>
+                    <li><a href="#">University of Sabaragamuwa, Sri Lanka</a></li>
+                    <li><a href="#">Download the Research Paper</a></li>
+                </ul>
+            </section>
+
+            <div class="back-to-top">
+                <a href="#">Back to top</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Department of Computing and Information System, University of Sabaragamuwa</p>
+    </footer>
+
+</body>
+</html>

@@ -122,8 +122,83 @@ code, pre {
 /* Footer */
 .footer {
     text-align: center;
-    padding: 40px;
+    padding: 20px;
     font-size: 0.9rem;
     color: #888;
     border-top: 1px solid var(--border-color);
+}
+
+/* Styling for Images and Visual Sections */
+.visual-container {
+    margin: 30px 0;
+    text-align: center;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.content-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.caption {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #555;
+}
+
+/* Ensure section headers have space */
+section {
+    scroll-margin-top: 20px;
+}
+
+/* Links Section Styling */
+#links h2 {
+    
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.links-list {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 60px;
+}
+
+.links-list li {
+    margin-bottom: 10px;
+}
+
+.links-list a {
+    color: #3b82f6; /* Matching the blue in your screenshot */
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.links-list a:hover {
+    text-decoration: underline;
+}
+
+/* Back to Top Styling */
+.back-to-top {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+.back-to-top a {
+    color: #3b82f6;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-to-top a:hover {
+    text-decoration: underline;
 }
