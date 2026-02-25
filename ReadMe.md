@@ -4,7 +4,7 @@
 ---
 
 ## 👥 Team 
-* T.Sajeeth ([e17144@eng.pdn.ac.lk](mailto:tsajeeth.appsc.sab.ac.lk))
+* T.Sajeeth ([tsajeeth.appsc.sab.ac.lk](mailto:tsajeeth.appsc.sab.ac.lk))
 ## Supervisors
 * Lec. Nishankar.S ([Nishankar@eng.pdn.ac.lk](mailto:Nishankar@eng.pdn.ac.lk))
 * Prof. Vigneshwaran.P ([Vigneshwaran@eng.pdn.ac.lk](mailto:Vigneshwaran@eng.pdn.ac.lk))
