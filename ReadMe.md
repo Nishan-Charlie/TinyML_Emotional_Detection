@@ -176,6 +176,19 @@ The trained model is optimized using **quantization (32-bit → 16-bit)** to red
 ## 10. Setup & Implementation
 
 ### Prerequisites
-* Python 3.8+, PyTorch, Torchvision, Scikit-learn, Matplotlib, NumPy, Tqdm
+* python train.py --data_dir images --epochs 100 --batch_size 32 --lr 0.001
 
 ### Installation
+pip install torch torchvision scikit-learn matplotlib numpy tqdm
+### Training
+python train.py --data_dir images --epochs 100 --batch_size 32 --lr 0.001
+
+## 11. Links
+* [Project Repository](https://github.com/Nishan-Charlie/TinyML_Emotional_Detection.git)
+* [Project Page](http://127.0.0.1:5500/docs/index.html#analysis)
+* [Department of Computing and Information System](#)
+* [University of Sabaragamuwa, Sri Lanka](#)
+
+---
+
+© 2026 Department of Computing and Information System, University of Sabaragamuwa
