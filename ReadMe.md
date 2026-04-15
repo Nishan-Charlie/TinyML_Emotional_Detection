@@ -1,13 +1,13 @@
 # Human Emotion Detection with LightCBAMNet: A Tiny Deep Learning Model for Edge Devices
 
-
 ---
 
 ## 👥 Team 
-* T.Sajeeth ([tsajeeth.appsc.sab.ac.lk](mailto:tsajeeth.appsc.sab.ac.lk))
+* T. Sajeeth ([tsajeeth@std.appsc.sab.ac.lk](mailto:tsajeeth@std.appsc.sab.ac.lk))
+
 ## Supervisors
-* Lec. Nishankar.S ([Nishankar@eng.pdn.ac.lk](mailto:Nishankar@eng.pdn.ac.lk))
-* Prof. Vigneshwaran.P ([Vigneshwaran@eng.pdn.ac.lk](mailto:Vigneshwaran@eng.pdn.ac.lk))
+* Lec. Nishankar S ([Nishankar@eng.pdn.ac.lk](mailto:Nishankar@eng.pdn.ac.lk))
+* Prof. Vigneshwaran P ([Vigneshwaran@eng.pdn.ac.lk](mailto:Vigneshwaran@eng.pdn.ac.lk))
 
 ---
 
@@ -15,93 +15,167 @@
 1. [Abstract & Overview](#1-abstract--overview)
 2. [Key Innovations](#2-key-innovations)
 3. [Data Preparation & Augmentation](#3-data-preparation--augmentation)
-4. [Architecture Breakdown](#4-architecture-breakdown)
-5. [Setup & Implementation](#5-setup--implementation)
-6. [Comparative Analysis](#6-comparative-analysis)
-7. [Links](#7-links)
+4. [Methodology](#4-methodology)
+5. [Architecture Breakdown](#5-architecture-breakdown)
+6. [Training Progress](#6-training-progress)
+7. [Results & Visual Analysis](#7-results--visual-analysis)
+8. [Comparative Analysis](#8-comparative-analysis)
+9. [Deployment & Quantization](#9-deployment--quantization)
+10. [Setup & Implementation](#10-setup--implementation)
+11. [Links](#11-links)
 
 ---
 
 ## 1. Abstract & Overview
-**LightCBAMNet** is a lightweight, high-performance convolutional neural network designed specifically for Facial Emotion Recognition (FER) in resource-constrained environments. By combining efficient depthwise convolutions with a specialized attention mechanism, this model achieves a balance between low parameter counts and high classification accuracy.
 
-🔬 **Research Focus:** This research addresses the challenge of deploying robust Emotion Detection on small edge devices such as IoT sensors, mobile devices, and micro-controllers, ensuring privacy and low latency through local inference.
+Facial Emotion Recognition (FER) on edge devices requires a balance between accuracy and computational efficiency. Traditional deep learning models rely on high-performance GPUs, making them unsuitable for real-time, low-power IoT environments. This study proposes an efficient FER framework using the FER-2013 dataset, designed specifically for edge deployment.
+
+The approach includes a preprocessing pipeline with CLAHE, unsharp masking, facial alignment, and masking to enhance feature quality. A dual-teacher knowledge distillation strategy is applied, transferring knowledge from ResNet50 and VGG19 models to a lightweight MobileNetV4-based student model.
+
+The proposed model achieves **72.0% accuracy**, outperforming both teacher models and ensemble methods, while using only **3.8M parameters** and **4–8 ms inference time per image**. This enables real-time, privacy-preserving emotion recognition on edge devices.
 
 ---
 
 ## 2. Key Innovations
+
 * **Phish Activation:** Uses the $x \cdot \tanh(\text{GELU}(x))$ activation function for smoother gradient flow compared to standard ReLU.
-* **DCWP Module:** Implements Depthwise Convolution with Phish activation to minimize FLOPs (Floating Point Operations) while maintaining feature richness.
-* **CBAM Integration:** A Convolutional Block Attention Module that sequentially applies Channel and Spatial attention, allowing the model to focus on critical facial landmarks like the eyes, nose, and mouth.
-* **Efficiency:** Optimized for a tiny memory footprint, making it ideal for real-time inference on hardware without dedicated GPUs.
+* **DCWP Module:** Implements Depthwise Convolution with Phish activation to minimize FLOPs while maintaining feature richness.
+* **CBAM Integration:** A Convolutional Block Attention Module that sequentially applies Channel and Spatial attention, allowing the model to focus on critical facial landmarks like the eyes, eyebrows, nose, and mouth.
+* **Edge Efficiency:** Optimized for fast inference, low latency, and reduced resource usage in edge environments.
 
 ---
 
 ## 3. Data Preparation & Augmentation
 
-### 3.1 Emotion Sample Visualization
-The dataset consists of grayscale and RGB facial images categorized into seven distinct emotions. 
+### 3.1 Original Facial Emotion Samples
+The original FER images contain faces with different poses, expressions, brightness levels, and background conditions.
 
-![Emotion Image Samples](docs/images/some_images.jpeg)
-*Figure 1: Representative samples from the emotion dataset showing various facial expressions.*
-
-### 3.2 Raw Dataset Distribution
-Before processing, a statistical analysis of the dataset was conducted to identify class imbalances.
-
-![Image Counting Chart](docs/images/count.png)
-*Figure 2: Distribution of image counts across the seven emotion categories prior to augmentation.*
-
-### 3.3 Post-Augmentation Analysis
-To enhance the robustness of LightCBAMNet, data augmentation techniques (rotations, flips, brightness) were applied to balance the classes.
-
-![After Augmentation Data](docs/images/augmentation.png)
-*Figure 4: Comparison of dataset density and diversity following the application of augmentation pipelines.*
+![Original Samples](docs/images/original.jpeg)  
+*Figure 1: Original facial emotion samples from the dataset before preprocessing.*
 
 ---
 
-## 4. Architecture Breakdown
-The model follows a streamlined, modular pipeline:
+### 3.2 Preprocessing Stage 1 – Contrast Enhancement
+CLAHE and unsharp masking are applied to improve contrast and edge clarity.
 
-1.  **Stem:** A large-kernel (7x7) convolution with stride 3 for rapid spatial downsampling.
-2.  **DCWP Layers:** Two stages of depthwise-pointwise convolutions for efficient feature extraction.
-3.  **LR Modules:** Linear Bottleneck Residual modules to refine features and prevent vanishing gradients.
-4.  **Attention Head:** The **CBAM** block (Channel Attention followed by Spatial Attention) to weight important features.
-5.  **Classifier:** Global Average Pooling followed by Dropout and a Linear layer for final emotion classification.
-
-
+![Preprocessing Step 1](docs/images/pre_process_1.png)  
+*Figure 2: Enhanced images after applying contrast improvement and sharpening operations.*
 
 ---
 
-## 5. Setup & Implementation
-**Prerequisites**
-* Python 3.8+, PyTorch 1.7+, Torchvision, Scikit-learn, and Tqdm.
+### 3.3 Preprocessing Stage 2 – Facial Alignment
+Facial alignment ensures consistent positioning of facial landmarks.
 
-**Installation**
-* `pip install torch torchvision scikit-learn tqdm`
-
-**Training**
-* To train the model on your dataset, use the following command:
-
-  `python train.py --data_dir images --epochs 20 --batch_size 32 --lr 0.001`
+![Preprocessing Step 2](docs/images/pre_process_2.png)  
+*Figure 3: Facial alignment step used to normalize the facial region.*
 
 ---
 
-## 6. Comparative Analysis
+### 3.4 Preprocessing Stage 3 – Final Output
+Processed images become cleaner and more consistent for training.
 
-| Model | Params | Target Device |
-| :--- | :--- | :--- |
-| ResNet-50 | ~25.6M | Desktop/Server |
-| MobileNetV2 | ~3.4M | Smartphone |
-| **LightCBAMNet** | **< 1M** | **Edge/IoT** |
+![Preprocessing Step 3](docs/images/Pre_process_3.png)  
+*Figure 4: Final preprocessed samples used for training after normalization and refinement.*
 
 ---
 
-## 7. Links
-* [Project Repository](https://github.com/Nishan-Charlie/TinyML_Emotional_Detection.git)
-* [Project Page](http://127.0.0.1:5500/docs/index.html#analysis)
-* [Department of Computing and Information System](#)
-* [University of Sabaragamuwa, Sri Lanka](#)
+### 3.5 Facial Masking
+Masking reduces background noise and improves focus on facial features.
 
+![Masked Images](docs/images/masked.png)  
+*Figure 5: Masked facial samples highlighting the region of interest used for training.*
 
 ---
-© 2026 Department of Computing and Information System, University of Sabaragamuwa
+
+## 4. Methodology
+
+The overall workflow begins with raw facial images. These images are first preprocessed through enhancement, facial alignment, and masking. Then, knowledge distillation is performed using **ResNet50** and **VGG19** as teacher models. Their soft-label knowledge is transferred to the lightweight student model **MobileNetV4 / LightCBAMNet**.
+
+During training, the student model learns from both **soft labels** generated by the teachers and **hard labels** from the dataset, improving generalization while maintaining efficiency.
+
+![Methodology Diagram](docs/images/methodology-diagram.png)  
+*Figure 6: Research methodology showing preprocessing, knowledge distillation, and prediction workflow.*
+
+---
+
+## 5. Architecture Breakdown
+
+The model follows a streamlined pipeline:
+
+1. **Input Stage:** Preprocessed facial images  
+2. **Feature Extraction:** Lightweight convolution layers  
+3. **Attention Mechanism:** CBAM highlights key regions  
+4. **Compact Representation:** Reduces parameters  
+5. **Classifier:** Outputs emotion probabilities  
+
+---
+
+## 6. Training Progress
+
+The model shows stable convergence during training. Validation accuracy reaches approximately **72.68%**.
+
+![Training Graph](docs/images/Training_graph.png)  
+*Figure 7: Training and validation performance across epochs.*
+
+---
+
+## 7. Results & Visual Analysis
+
+### 7.1 Confusion Matrix
+Shows class-wise prediction performance and misclassification patterns.
+
+![Confusion Matrix](docs/images/confusion_matrix.png)  
+*Figure 8: Confusion matrix of the trained model.*
+
+---
+
+### 7.2 Feature Visualization
+Demonstrates that the model focuses on key facial regions.
+
+![Feature Visualization](docs/images/feature.jpeg)  
+*Figure 9: Feature map visualization.*
+
+---
+
+## 8. Comparative Analysis
+
+### Performance Comparison
+
+| Model | Accuracy (%) | Precision (%) | Recall (%) | F1-Score (%) |
+|------|-------------|--------------|-----------|-------------|
+| ResNet50 | 68.7 | 68.5 | 68.7 | 68.6 |
+| VGG19 | 69.0 | 68.8 | 69.0 | 68.9 |
+| EfficientNetB0 | 67.2 | 67.0 | 67.2 | 67.1 |
+| MobileNetV2 | 66.4 | 66.2 | 66.4 | 66.3 |
+| MobileNetV4 (Baseline) | 68.4 | 68.2 | 68.4 | 68.3 |
+| Ensemble | 70.7 | 70.5 | 70.7 | 70.6 |
+| **Proposed (LightCBAMNet)** | **72.0** | **71.8** | **72.0** | **71.9** |
+
+---
+
+### Efficiency Comparison
+
+| Model | Params (M) | GFLOPs | Size (MB) | Time (ms) |
+|------|-----------|--------|----------|----------|
+| ResNet50 | 25.6 | 4.1 | 102 | 15–25 |
+| VGG19 | 143.7 | 19.6 | 574 | 30–50 |
+| MobileNetV4 | 3.8 | 0.2 | 10 | 4–8 |
+| **Proposed** | **3.8** | **0.2** | **10** | **4–8** |
+
+---
+
+## 9. Deployment & Quantization
+
+The trained model is optimized using **quantization (32-bit → 16-bit)** to reduce memory usage and improve inference speed.
+
+![Deployment Pipeline](docs/images/deploye.png)  
+*Figure 10: Deployment and quantization workflow.*
+
+---
+
+## 10. Setup & Implementation
+
+### Prerequisites
+* Python 3.8+, PyTorch, Torchvision, Scikit-learn, Matplotlib, NumPy, Tqdm
+
+### Installation
